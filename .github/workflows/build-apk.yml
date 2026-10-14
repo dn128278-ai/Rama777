@@ -1,0 +1,108 @@
+name: Build RAMA77 Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Extract Uploaded ZIP File
+        run: |
+          ZIP_FILE=$(ls *.zip 2>/dev/null | head -n 1)
+          if [ -n "$ZIP_FILE" ]; then
+            echo "Found ZIP file: $ZIP_FILE. Extracting..."
+            unzip -o "$ZIP_FILE" -d temp_extract
+            
+            GRADLEW_PATH=$(find temp_extract -name "gradlew" | head -n 1)
+            if [ -n "$GRADLEW_PATH" ]; then
+              SRC_DIR=$(dirname "$GRADLEW_PATH")
+              shopt -s dotglob
+              cp -rn "$SRC_DIR"/* .
+            else
+              shopt -s dotglob
+              cp -rn temp_extract/* .
+            fi
+            rm -rf temp_extract
+          fi
+
+      - name: Auto Ensure Layout & Resource Structure
+        run: |
+          mkdir -p app/src/main/res/layout
+          mkdir -p app/src/main/res/color
+
+          if [ ! -f "app/src/main/res/layout/item_funds_menu.xml" ]; then
+            cat << 'EOF' > app/src/main/res/layout/item_funds_menu.xml
+            <?xml version="1.0" encoding="utf-8"?>
+            <com.google.android.material.card.MaterialCardView 
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="4dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/menuIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_agenda" />
+
+                    <TextView
+                        android:id="@+id/menuTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:text="Fund Option"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/black" />
+
+                    <ImageView
+                        android:id="@+id/menuArrow"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_media_play" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            EOF
+          fi
+
+      - name: Build Debug APK
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x gradlew
+            ./gradlew assembleDebug --stacktrace --continue
+          else
+            gradle wrapper
+            chmod +x gradlew
+            ./gradlew assembleDebug --stacktrace --continue
+          fi
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: RAMA77-Debug-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
