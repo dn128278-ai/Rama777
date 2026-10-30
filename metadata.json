@@ -1,0 +1,6 @@
+{
+  "name": "Rama77 Admin Panel",
+  "description": "Rama77 enterprise-grade standalone gaming admin control panel featuring real-time market management, live single ank bid tracking, user ledger, financial operations, and full configuration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

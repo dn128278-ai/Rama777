@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardFundsMenu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="14dp"
+    android:layout_marginEnd="14dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp">
+
+        <!-- Left Menu Icon Container -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardIconContainer"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#FEF3C7">
+
+            <ImageView
+                android:id="@+id/ivMenuIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/menu_icon_desc"
+                android:src="@drawable/ic_wallet_menu"
+                app:tint="#D97706" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Right Arrow Indicator -->
+        <ImageView
+            android:id="@+id/ivArrowIndicator"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/arrow_desc"
+            android:src="@drawable/ic_arrow_forward"
+            app:tint="#94A3B8" />
+
+        <!-- Title & Subtitle for Funds Action -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toEndOf="@id/cardIconContainer"
+            android:layout_toStartOf="@id/ivArrowIndicator"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvMenuTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_funds_title"
+                android:textColor="#0F172A"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="Add Funds / Deposit" />
+
+            <TextView
+                android:id="@+id/tvMenuSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/add_funds_subtitle"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:visibility="visible"
+                tools:text="UPI, PhonePe, GPay, Paytm" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
